@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is My Dog Thriving? | The Finley Files</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #2C4A3E;
+    --green-mid: #3D6B5C;
+    --green-light: #E8F0ED;
+    --cream: #FAF7F2;
+    --gold: #C9A84C;
+    --text-dark: #1A2E26;
+    --text-mid: #4A5E56;
+    --text-light: #7A8E86;
+    --white: #FFFFFF;
+    --shadow: 0 4px 24px rgba(44,74,62,0.10);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--green-dark);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  header .paw { font-size: 20px; }
+
+  header span {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .hero {
+    background: var(--green-dark);
+    padding: 48px 24px 56px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.2;
+    max-width: 560px;
+    margin: 0 auto 16px;
+  }
+
+  .hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 16px;
+    font-weight: 300;
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .card-wrap {
+    max-width: 620px;
+    margin: -32px auto 0;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 36px 32px;
+  }
+
+  /* STEP INDICATOR */
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green-light);
+    transition: background 0.3s;
+  }
+
+  .step-dot.active { background: var(--green-dark); }
+  .step-dot.done { background: var(--gold); }
+
+  .step-label {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-left: 4px;
+    font-weight: 500;
+  }
+
+  /* QUESTION */
+  .question-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .question-sub {
+    font-size: 14px;
+    color: var(--text-mid);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .option-btn {
+    background: var(--cream);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .option-btn:hover {
+    border-color: var(--green-mid);
+    background: var(--green-light);
+  }
+
+  .option-btn.selected {
+    border-color: var(--green-dark);
+    background: var(--green-light);
+    font-weight: 500;
+  }
+
+  .option-btn .age-tag {
+    display: block;
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  /* AGE GRID */
+  .age-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .age-btn {
+    background: var(--cream);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 16px 8px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .age-btn span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: var(--text-light);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  .age-btn:hover {
+    border-color: var(--green-mid);
+    background: var(--green-light);
+  }
+
+  .age-btn.selected {
+    border-color: var(--green-dark);
+    background: var(--green-light);
+  }
+
+  /* CHECKBOX OPTIONS */
+  .check-options { display: flex; flex-direction: column; gap: 8px; }
+
+  .check-btn {
+    background: var(--cream);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .check-btn:hover { border-color: var(--green-mid); background: var(--green-light); }
+  .check-btn.selected { border-color: var(--green-dark); background: var(--green-light); }
+
+  .check-box {
+    width: 18px; height: 18px;
+    border: 2px solid var(--text-light);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--green-dark);
+    transition: all 0.2s;
+  }
+
+  .check-btn.selected .check-box {
+    border-color: var(--green-dark);
+    background: var(--green-dark);
+    color: white;
+  }
+
+  /* NAV */
+  .nav { display: flex; gap: 10px; margin-top: 28px; }
+
+  .btn-next {
+    flex: 1;
+    background: var(--green-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-next:hover { background: var(--green-mid); }
+  .btn-next:disabled { background: #ccc; cursor: not-allowed; }
+
+  .btn-back {
+    background: transparent;
+    border: 2px solid var(--green-light);
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover { border-color: var(--green-mid); color: var(--green-dark); }
+
+  /* EMAIL FORM */
+  .email-intro {
+    background: var(--green-light);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .email-intro strong { color: var(--green-dark); }
+
+  .input-group { display: flex; flex-direction: column; gap: 10px; }
+
+  .input-field {
+    border: 2px solid var(--green-light);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-dark);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-field:focus { border-color: var(--green-dark); background: var(--white); }
+
+  .privacy-note {
+    font-size: 12px;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* RESULT */
+  .result-header {
+    background: var(--green-dark);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .result-header .dog-name {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .result-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .result-section { margin-bottom: 20px; }
+
+  .result-section h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+
+  .insight-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--green-light);
+    align-items: flex-start;
+  }
+
+  .insight-item:last-child { border-bottom: none; }
+
+  .insight-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .insight-text { font-size: 14px; color: var(--text-mid); line-height: 1.5; }
+  .insight-text strong { color: var(--text-dark); }
+
+  .affiliate-block {
+    border: 2px solid var(--green-light);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+
+  .affiliate-block .tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .affiliate-block h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+
+  .affiliate-block p {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .affiliate-link {
+    display: inline-block;
+    background: var(--green-dark);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .affiliate-link:hover { background: var(--green-mid); }
+
+  .finley-note {
+    background: var(--cream);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+
+  .finley-note strong { color: var(--text-dark); }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* HIDDEN */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  @media (max-width: 480px) {
+    .card { padding: 24px 20px; }
+    .age-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .age-btn { padding: 12px 4px; font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="paw">🐾</span>
+  <span>Jim & Finley | The Finley Files</span>
+</header>
+
+<div class="hero">
+  <h1>Is My Dog Actually Thriving?</h1>
+  <p>A 2-minute check built for real dog owners. No vet jargon. Just honest, helpful insight for your dog, at their age.</p>
+</div>
+
+<div class="card-wrap">
+  <div class="card">
+
+    <!-- STEP 1: Dog's Name -->
+    <div class="step active" id="step1">
+      <div class="step-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <span class="step-label">Step 1 of 5</span>
+      </div>
+      <h2 class="question-title">What's your dog's name?</h2>
+      <p class="question-sub">Everything from here is about them.</p>
+      <div class="input-group">
+        <input type="text" class="input-field" id="dogName" placeholder="Finley" maxlength="30">
+      </div>
+      <div class="nav">
+        <button class="btn-next" onclick="goStep(2)">Let's start →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Age -->
+    <div class="step" id="step2">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <span class="step-label">Step 2 of 5</span>
+      </div>
+      <h2 class="question-title">How old is <span class="dog-name-display">your dog</span>?</h2>
+      <p class="question-sub">Age shapes everything — what's normal, what to watch for, what to do next.</p>
+      <div class="age-grid" id="ageGrid"></div>
+      <div class="nav">
+        <button class="btn-back" onclick="goStep(1)">Back</button>
+        <button class="btn-next" id="ageNext" onclick="goStep(3)" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: What you're noticing -->
+    <div class="step" id="step3">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <span class="step-label">Step 3 of 5</span>
+      </div>
+      <h2 class="question-title">What are you noticing in <span class="dog-name-display">your dog</span> lately?</h2>
+      <p class="question-sub">Check everything that applies. Even small things count.</p>
+      <div class="check-options" id="symptomsGrid"></div>
+      <div class="nav">
+        <button class="btn-back" onclick="goStep(2)">Back</button>
+        <button class="btn-next" onclick="goStep(4)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Size -->
+    <div class="step" id="step4">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <span class="step-label">Step 4 of 5</span>
+      </div>
+      <h2 class="question-title">How big is <span class="dog-name-display">your dog</span>?</h2>
+      <p class="question-sub">Size affects how quickly dogs age and what to watch for.</p>
+      <div class="options">
+        <button class="option-btn" onclick="selectSize(this, 'small')">
+          Small — under 20 lbs
+          <span class="age-tag">Chihuahua, Yorkie, Dachshund, Corgi</span>
+        </button>
+        <button class="option-btn" onclick="selectSize(this, 'medium')">
+          Medium — 20 to 50 lbs
+          <span class="age-tag">Springer Spaniel, Husky, Border Collie</span>
+        </button>
+        <button class="option-btn" onclick="selectSize(this, 'large')">
+          Large — 50 to 90 lbs
+          <span class="age-tag">Golden Retriever, Lab, German Shepherd</span>
+        </button>
+        <button class="option-btn" onclick="selectSize(this, 'giant')">
+          Giant — over 90 lbs
+          <span class="age-tag">Great Dane, Bernese, Mastiff</span>
+        </button>
+      </div>
+      <div class="nav">
+        <button class="btn-back" onclick="goStep(3)">Back</button>
+        <button class="btn-next" id="sizeNext" onclick="goStep(5)" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Email capture -->
+    <div class="step" id="step5">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <span class="step-label">Step 5 of 5</span>
+      </div>
+      <h2 class="question-title"><span class="dog-name-display">Your dog</span>'s personalized snapshot is ready.</h2>
+      <div class="email-intro">
+        Based on what you've shared, I've put together a <strong>personalized health snapshot</strong> for <span class="dog-name-display">your dog</span> — what's normal at their age, what to keep an eye on, and what to do next. Enter your email and I'll send it straight to you.
+      </div>
+      <div class="input-group">
+        <input type="text" class="input-field" id="ownerName" placeholder="Your first name">
+        <input type="email" class="input-field" id="ownerEmail" placeholder="Your email address">
+        <button class="btn-next" onclick="showResult()">Send my snapshot 🐾</button>
+      </div>
+      <p class="privacy-note">No spam. No selling your info. Just one honest email from me and Finley. — Jim</p>
+      <div class="nav" style="margin-top:12px;">
+        <button class="btn-back" onclick="goStep(4)">Back</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="step" id="stepResult">
+      <div class="result-header">
+        <div class="dog-name" id="resultDogLabel">YOUR DOG'S SNAPSHOT</div>
+        <h2 id="resultHeadline">Here's what we see.</h2>
+      </div>
+
+      <div class="result-section">
+        <h3>What's normal at this age</h3>
+        <div id="normalInsights"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>What to keep an eye on</h3>
+        <div id="watchInsights"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>Helpful next steps</h3>
+        <div id="affiliateRecs"></div>
+      </div>
+
+      <div class="finley-note" id="finleyNote"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  This is not veterinary advice. When something feels off, trust your gut and call your vet.<br>
+  Built with love by Jim & Finley | <a href="https://thefinleyfiles.store" style="color:var(--green-mid);">thefinleyfiles.store</a>
+</footer>
+
+<script>
+  let dogName = '';
+  let dogAge = null;
+  let dogSize = '';
+  let selectedSymptoms = [];
+
+  const symptoms = [
+    { id: 'energy', label: 'Less energy or enthusiasm than usual' },
+    { id: 'coat', label: 'Changes in coat — dull, thinning, or more shedding' },
+    { id: 'eating', label: 'Eating less or drinking differently' },
+    { id: 'bathroom', label: 'Changes in bathroom habits' },
+    { id: 'mobility', label: 'Stiffness, limping, or trouble getting up' },
+    { id: 'behavior', label: 'Mood or behavior seems different' },
+    { id: 'weight', label: 'Weight gain or loss' },
+    { id: 'nothing', label: "Nothing obvious — just want to be proactive" }
+  ];
+
+  // Build age buttons
+  const ageGrid = document.getElementById('ageGrid');
+  for (let a = 5; a <= 14; a++) {
+    const btn = document.createElement('button');
+    btn.className = 'age-btn';
+    btn.innerHTML = `${a}<span>yrs</span>`;
+    btn.onclick = () => selectAge(btn, a);
+    ageGrid.appendChild(btn);
+  }
+
+  // Build symptom checkboxes
+  const sympGrid = document.getElementById('symptomsGrid');
+  symptoms.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'check-btn';
+    btn.innerHTML = `<div class="check-box" id="cb-${s.id}"></div>${s.label}`;
+    btn.onclick = () => toggleSymptom(btn, s.id);
+    sympGrid.appendChild(btn);
+  });
+
+  function updateDogNames() {
+    dogName = document.getElementById('dogName').value.trim() || 'your dog';
+    document.querySelectorAll('.dog-name-display').forEach(el => el.textContent = dogName);
+  }
+
+  function goStep(n) {
+    updateDogNames();
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectAge(btn, age) {
+    document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    dogAge = age;
+    document.getElementById('ageNext').disabled = false;
+  }
+
+  function toggleSymptom(btn, id) {
+    btn.classList.toggle('selected');
+    const cb = document.getElementById('cb-' + id);
+    if (btn.classList.contains('selected')) {
+      selectedSymptoms.push(id);
+      cb.textContent = '✓';
+    } else {
+      selectedSymptoms = selectedSymptoms.filter(s => s !== id);
+      cb.textContent = '';
+    }
+  }
+
+  function selectSize(btn, size) {
+    document.querySelectorAll('#step4 .option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    dogSize = size;
+    document.getElementById('sizeNext').disabled = false;
+  }
+
+  function getAgeProfile() {
+    const name = dogName === 'your dog' ? 'Your dog' : dogName;
+    if (dogAge <= 6) {
+      return {
+        headline: `${name} is in the prime of life — and this is exactly when to start paying attention.`,
+        normal: [
+          { icon: '⚡', text: '<strong>Energy and enthusiasm</strong> should still be strong. Some natural mellowing is fine — it\'s the sudden drops that matter.' },
+          { icon: '🧥', text: '<strong>Coat and skin</strong> are usually healthy at this age. Minor seasonal shedding is normal.' },
+          { icon: '🍽️', text: '<strong>Appetite</strong> should be consistent. Dogs this age rarely skip meals without reason.' }
+        ],
+        watch: [
+          { icon: '🔍', text: '<strong>Early joint changes</strong> can begin in larger breeds around age 5-6. Watch for stiffness after rest.' },
+          { icon: '🧬', text: '<strong>Genetic health risks</strong> — this is the ideal age to do a DNA health screen before symptoms appear.' },
+          { icon: '⚖️', text: '<strong>Weight creep</strong> — metabolism starts to slow. A little extra weight now becomes a bigger problem at 8 or 9.' }
+        ],
+        embark: true,
+        luma: false,
+        finleyNote: `Finley is almost 8, so I know what it feels like to look at your dog and wonder what's coming. The best thing I did when Finley was younger was just start paying attention to his baseline — what normal looked like — so I'd know when something shifted. That's all this is. — Jim 🐾`
+      };
+    } else if (dogAge <= 9) {
+      return {
+        headline: `${name} is moving into the years that matter most. What you notice now makes a real difference.`,
+        normal: [
+          { icon: '😴', text: '<strong>More rest</strong> is normal. Dogs this age sleep more and that\'s okay — it\'s the quality of their awake time that matters.' },
+          { icon: '🐾', text: '<strong>Slower on walks</strong> is common, especially in larger breeds. They\'re not broken — they\'re just more deliberate.' },
+          { icon: '🧥', text: '<strong>Coat changes</strong> — some greying around the muzzle is completely normal at this age.' }
+        ],
+        watch: [
+          { icon: '🦴', text: '<strong>Joint stiffness</strong> — especially after sleeping or in cold weather. Watch how they get up in the morning.' },
+          { icon: '🍽️', text: '<strong>Appetite changes</strong> — eating less, eating slower, or showing less excitement around meals can signal something worth checking.' },
+          { icon: '🧠', text: '<strong>Behavior shifts</strong> — confusion, anxiety, or changes in how they interact with you can be early cognitive signs.' }
+        ],
+        embark: true,
+        luma: true,
+        finleyNote: `Finley is right in this window and I watch him every single day. Not obsessively — just present. The five things on the Thriving Dog Checklist are what I actually check. It takes two minutes and it keeps me grounded. — Jim 🐾`
+      };
+    } else {
+      return {
+        headline: `${name} is a wise one. These years are about quality — and there's a lot you can do.`,
+        normal: [
+          { icon: '😴', text: '<strong>Significant rest</strong> is expected and healthy. Let them sleep — their bodies are working hard.' },
+          { icon: '🐕', text: '<strong>Shorter, gentler activity</strong> is often better than long walks. Sniff walks and calm time matter more than distance.' },
+          { icon: '❤️', text: '<strong>Closer to you</strong> — many dogs this age become more bonded. They want to be near you more. Let them.' }
+        ],
+        watch: [
+          { icon: '🦴', text: '<strong>Pain management</strong> — stiffness, reluctance to climb stairs, or difficulty lying down can all indicate joint pain worth addressing.' },
+          { icon: '🧠', text: '<strong>Cognitive changes</strong> — disorientation, altered sleep cycles, or getting "lost" in the house are signs worth discussing with your vet.' },
+          { icon: '🍽️', text: '<strong>Weight and appetite</strong> — both unintentional weight loss AND gain are worth monitoring closely at this age.' }
+        ],
+        embark: false,
+        luma: true,
+        finleyNote: `I think about this stage a lot with Finley approaching 8. These dogs have given us everything. The least we can do is pay attention. If something feels off — trust that feeling. You know your dog better than anyone. — Jim 🐾`
+      };
+    }
+  }
+
+  function showResult() {
+    updateDogNames();
+    const profile = getAgeProfile();
+    const name = dogName === 'your dog' ? 'Your dog' : dogName;
+
+    document.getElementById('resultDogLabel').textContent = name.toUpperCase() + ' — AGE ' + dogAge;
+    document.getElementById('resultHeadline').textContent = profile.headline;
+
+    const normalEl = document.getElementById('normalInsights');
+    normalEl.innerHTML = profile.normal.map(i =>
+      `<div class="insight-item"><span class="insight-icon">${i.icon}</span><div class="insight-text">${i.text}</div></div>`
+    ).join('');
+
+    const watchEl = document.getElementById('watchInsights');
+    watchEl.innerHTML = profile.watch.map(i =>
+      `<div class="insight-item"><span class="insight-icon">${i.icon}</span><div class="insight-text">${i.text}</div></div>`
+    ).join('');
+
+    let recs = '';
+
+    recs += `<div class="affiliate-block">
+      <div class="tag">FREE RESOURCE</div>
+      <h4>The Thriving Dog Checklist</h4>
+      <p>Five simple signs to check weekly. Takes two minutes. Helps you catch changes early — before they become problems.</p>
+      <a class="affiliate-link" href="https://thefinleyfiles.store" target="_blank">Get the free checklist</a>
+    </div>`;
+
+    if (profile.embark) {
+      recs += `<div class="affiliate-block">
+        <div class="tag">DNA HEALTH SCREENING</div>
+        <h4>Embark Dog DNA Test</h4>
+        <p>Know what health conditions ${name} may be predisposed to — before symptoms show up. Finley's breed (Golden Retriever) carries specific genetic risks. Knowing is better than guessing.</p>
+        <a class="affiliate-link" href="https://embarkvet.sjv.io/yZo9rG" target="_blank">Learn about Embark</a>
+      </div>`;
+    }
+
+    if (profile.luma) {
+      recs += `<div class="affiliate-block">
+        <div class="tag">JOINT & MOBILITY SUPPORT</div>
+        <h4>MedcoVet Red Light Therapy</h4>
+        <p>If you're seeing stiffness or mobility changes in ${name}, MedcoVet offers a free consultation to see if red light therapy could help. No commitment — just a conversation.</p>
+        <a class="affiliate-link" href="https://a.medcovet.com/FinleyFiles" target="_blank">Book a free consultation</a>
+      </div>`;
+    }
+
+    document.getElementById('affiliateRecs').innerHTML = recs;
+    document.getElementById('finleyNote').innerHTML = `<strong>A note from Jim:</strong> ${profile.finleyNote}`;
+
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('stepResult').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

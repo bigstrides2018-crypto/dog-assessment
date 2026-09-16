@@ -566,7 +566,8 @@
       <div class="input-group">
         <input type="text" class="input-field" id="ownerName" placeholder="Your first name">
         <input type="email" class="input-field" id="ownerEmail" placeholder="Your email address">
-        <button class="btn-next" onclick="showResult()">Send my snapshot 🐾</button>
+        <button class="btn-next" id="submitBtn" onclick="submitEmail()">Send my snapshot 🐾</button>
+        <div id="emailError" style="color:#c0392b;font-size:13px;margin-top:8px;display:none;">Please enter a valid email address.</div>
       </div>
       <p class="privacy-note">No spam. No selling your info. Just one honest email from me and Finley. — Jim</p>
       <div class="nav" style="margin-top:12px;">
@@ -740,6 +741,34 @@
         finleyNote: `I think about this stage a lot with Finley approaching 8. These dogs have given us everything. The least we can do is pay attention. If something feels off — trust that feeling. You know your dog better than anyone. — Jim 🐾`
       };
     }
+  }
+
+  async function submitEmail() {
+    const email = document.getElementById('ownerEmail').value.trim();
+    const name = document.getElementById('ownerName').value.trim();
+    const errorEl = document.getElementById('emailError');
+    const btn = document.getElementById('submitBtn');
+
+    if (!email || !email.includes('@')) {
+      errorEl.style.display = 'block';
+      return;
+    }
+    errorEl.style.display = 'none';
+    btn.textContent = 'Loading your snapshot...';
+    btn.disabled = true;
+
+    // Submit to Beacons
+    try {
+      await fetch('https://api.beacons.ai/creator/b9d4df71-9b5c-4405-a6d3-d223ee9871b9/subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, firstName: name, tags: ['assessment'] })
+      });
+    } catch(e) {
+      // Show results regardless
+    }
+
+    showResult();
   }
 
   function showResult() {

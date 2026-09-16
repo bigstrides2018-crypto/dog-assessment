@@ -762,10 +762,43 @@
 
     let recs = '';
 
+    // Symptom-specific callouts for eyes, ears, nose, teeth
+    if (selectedSymptoms.includes('eyes')) {
+      recs += `<div class="affiliate-block">
+        <div class="tag">WHAT YOU NOTICED — EYES</div>
+        <h4>Eye changes in dogs 5 and up</h4>
+        <p>Cloudiness, discharge, or squinting can signal anything from minor irritation to early cataracts or glaucoma. In older dogs, some cloudiness (nuclear sclerosis) is normal — but sudden changes, redness, or pawing at the eye are worth a vet visit. Don't wait on this one.</p>
+      </div>`;
+    }
+
+    if (selectedSymptoms.includes('ears')) {
+      recs += `<div class="affiliate-block">
+        <div class="tag">WHAT YOU NOTICED — EARS</div>
+        <h4>Ear issues in dogs 5 and up</h4>
+        <p>Scratching, odor, or head shaking usually means an infection, yeast buildup, or ear mites. Golden Retrievers are especially prone to ear issues because of their floppy ears and love of water. Caught early, most ear problems are easy to treat. Left alone, they can become chronic. Check inside the ear flap — if it smells or looks inflamed, call your vet.</p>
+      </div>`;
+    }
+
+    if (selectedSymptoms.includes('nose')) {
+      recs += `<div class="affiliate-block">
+        <div class="tag">WHAT YOU NOTICED — NOSE</div>
+        <h4>Nose changes in dogs 5 and up</h4>
+        <p>A dry or cracked nose isn't always a problem — it can happen after sleep or in dry weather. But persistent dryness, cracking, or unusual discharge (especially colored or one-sided) is worth paying attention to. A healthy dog's nose should be moist and smooth most of the time. If it's been dry for days or there's any discharge, mention it to your vet at the next visit.</p>
+      </div>`;
+    }
+
+    if (selectedSymptoms.includes('teeth')) {
+      recs += `<div class="affiliate-block">
+        <div class="tag">WHAT YOU NOTICED — TEETH AND GUMS</div>
+        <h4>Dental health in dogs 5 and up</h4>
+        <p>Bad breath, yellow or brown buildup, or red and swollen gums are signs of gum disease — which affects most dogs by age 3 and gets worse without attention. In older dogs, dental disease isn't just a mouth problem. Bacteria from infected gums can affect the heart, kidneys, and liver. If you're seeing any of these signs, a dental check with your vet is worth booking sooner rather than later.</p>
+      </div>`;
+    }
+
     recs += `<div class="affiliate-block">
       <div class="tag">FREE RESOURCE</div>
       <h4>The Thriving Dog Checklist</h4>
-      <p>Five simple signs to check weekly. Takes two minutes. Helps you catch changes early — before they become problems.</p>
+      <p>Eleven simple signs to check weekly. Takes two minutes. Helps you catch changes early — before they become problems.</p>
       <a class="affiliate-link" href="https://thefinleyfiles.store" target="_blank">Get the free checklist</a>
     </div>`;
 

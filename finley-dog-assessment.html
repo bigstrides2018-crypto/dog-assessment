@@ -568,6 +568,12 @@
         <input type="email" class="input-field" id="ownerEmail" placeholder="Your email address">
         <button class="btn-next" id="submitBtn" onclick="submitEmail()">Send my snapshot 🐾</button>
         <div id="emailError" style="color:#c0392b;font-size:13px;margin-top:8px;display:none;">Please enter a valid email address.</div>
+        <div id="submitSuccess" style="color:#2d6a4f;font-size:14px;margin-top:8px;display:none;">✓ You're in! Your snapshot is loading below.</div>
+      </div>
+      <!-- Hidden Beacons form that handles the actual submission -->
+      <div id="beacons-form-container" style="display:none;">
+        <script src="https://embed.beacons.ai/embed.js"></script>
+        <div data-beacons-form-id="23a91897-9478-4b63-aa87-ffbe1434a3e2"></div>
       </div>
       <p class="privacy-note">No spam. No selling your info. Just one honest email from me and Finley. — Jim</p>
       <div class="nav" style="margin-top:12px;">
@@ -747,6 +753,7 @@
     const email = document.getElementById('ownerEmail').value.trim();
     const name = document.getElementById('ownerName').value.trim();
     const errorEl = document.getElementById('emailError');
+    const successEl = document.getElementById('submitSuccess');
     const btn = document.getElementById('submitBtn');
 
     if (!email || !email.includes('@')) {
@@ -757,17 +764,21 @@
     btn.textContent = 'Loading your snapshot...';
     btn.disabled = true;
 
-    // Submit to Beacons
+    // Submit to Beacons embed form endpoint
     try {
-      await fetch('https://api.beacons.ai/creator/b9d4df71-9b5c-4405-a6d3-d223ee9871b9/subscribers', {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+
+      await fetch('https://embed.beacons.ai/api/form/23a91897-9478-4b63-aa87-ffbe1434a3e2/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, firstName: name, tags: ['assessment'] })
+        body: formData
       });
     } catch(e) {
-      // Show results regardless
+      // Proceed to results regardless — don't block the user
     }
 
+    successEl.style.display = 'block';
     showResult();
   }
 

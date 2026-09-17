@@ -563,19 +563,26 @@
       <div class="email-intro">
         Based on what you've shared, I've put together a <strong>personalized health snapshot</strong> for <span class="dog-name-display">your dog</span> — what's normal at their age, what to keep an eye on, and what to do next. Enter your email and I'll send it straight to you.
       </div>
-      <div class="input-group">
-        <input type="text" class="input-field" id="ownerName" placeholder="Your first name">
-        <input type="email" class="input-field" id="ownerEmail" placeholder="Your email address">
-        <button class="btn-next" id="submitBtn" onclick="submitEmail()">Send my snapshot 🐾</button>
-        <div id="emailError" style="color:#c0392b;font-size:13px;margin-top:8px;display:none;">Please enter a valid email address.</div>
-        <div id="submitSuccess" style="color:#2d6a4f;font-size:14px;margin-top:8px;display:none;">✓ You're in! Your snapshot is loading below.</div>
+      <div class="beacons-embed-wrap">
+        <div id="206e11e3-d7b2-4963-bc4c-974201897de5"></div>
+        <script>
+          (function () {
+            function loadBeaconsEmailFormEmbed() {
+              var s = document.createElement("script");
+              var t = Math.floor(new Date().getTime() / 120000);
+              s.type = "module";
+              s.async = 1;
+              s.src = `https://beacons.ai/embeds/emailForm.js?v=${t}&b=thefinleyfiles&f=206e11e3-d7b2-4963-bc4c-974201897de5`;
+              (document.head || document.body || document.documentElement).appendChild(s);
+            }
+            if (document.readyState === "loading") {
+              document.addEventListener("DOMContentLoaded", loadBeaconsEmailFormEmbed, { once: true });
+              return;
+            }
+            loadBeaconsEmailFormEmbed();
+          })();
+        </script>
       </div>
-      <!-- Hidden Beacons form that handles the actual submission -->
-      <div id="beacons-form-container" style="display:none;">
-        <script src="https://embed.beacons.ai/embed.js"></script>
-        <div data-beacons-form-id="23a91897-9478-4b63-aa87-ffbe1434a3e2"></div>
-      </div>
-      <p class="privacy-note">No spam. No selling your info. Just one honest email from me and Finley. — Jim</p>
       <div class="nav" style="margin-top:12px;">
         <button class="btn-back" onclick="goStep(4)">Back</button>
       </div>
@@ -749,38 +756,7 @@
     }
   }
 
-  async function submitEmail() {
-    const email = document.getElementById('ownerEmail').value.trim();
-    const name = document.getElementById('ownerName').value.trim();
-    const errorEl = document.getElementById('emailError');
-    const successEl = document.getElementById('submitSuccess');
-    const btn = document.getElementById('submitBtn');
 
-    if (!email || !email.includes('@')) {
-      errorEl.style.display = 'block';
-      return;
-    }
-    errorEl.style.display = 'none';
-    btn.textContent = 'Loading your snapshot...';
-    btn.disabled = true;
-
-    // Submit to Beacons embed form endpoint
-    try {
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-
-      await fetch('https://embed.beacons.ai/api/form/23a91897-9478-4b63-aa87-ffbe1434a3e2/submit', {
-        method: 'POST',
-        body: formData
-      });
-    } catch(e) {
-      // Proceed to results regardless — don't block the user
-    }
-
-    successEl.style.display = 'block';
-    showResult();
-  }
 
   function showResult() {
     updateDogNames();

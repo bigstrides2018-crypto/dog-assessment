@@ -66,7 +66,6 @@
     margin: 0 auto;
   }
 
-  /* Progress */
   .progress-wrap {
     width: 100%;
     max-width: 560px;
@@ -94,7 +93,6 @@
     transition: width 0.4s ease;
   }
 
-  /* Card */
   .card {
     background: var(--white);
     border-radius: var(--radius);
@@ -122,7 +120,6 @@
     line-height: 1.5;
   }
 
-  /* Options */
   .options { display: flex; flex-direction: column; gap: 10px; }
 
   .option {
@@ -165,7 +162,6 @@
   .option-text { font-size: 15px; line-height: 1.4; }
   .option-note { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
 
-  /* Text input */
   .text-input {
     width: 100%;
     padding: 14px 16px;
@@ -185,7 +181,6 @@
   .error-msg { font-size: 13px; color: #c0392b; margin-top: 4px; display: none; }
   .error-msg.show { display: block; }
 
-  /* Email step */
   .email-context {
     background: var(--green-light);
     border-radius: var(--radius);
@@ -214,7 +209,6 @@
     line-height: 1.5;
   }
 
-  /* Buttons */
   .btn {
     display: block;
     width: 100%;
@@ -245,7 +239,6 @@
 
   .btn-secondary:hover { background: var(--green-light); }
 
-  /* Results */
   .result-header {
     text-align: center;
     padding-bottom: 20px;
@@ -351,7 +344,6 @@
 
   .result-cta a:hover { background: var(--green-mid); }
 
-  /* Sending state */
   .sending-msg {
     text-align: center;
     padding: 20px 0;
@@ -533,7 +525,7 @@
       <div class="result-sections" id="result-sections"></div>
 
       <div class="result-cta">
-        <p>We've sent your full snapshot to your email. In the meantime — grab Finley's free dog wellness checklist for weekly ideas to help your dog thrive.</p>
+        <p>Here's your dog's snapshot above. Want more? Grab Finley's free dog wellness checklist for weekly ideas to help your dog thrive.</p>
         <a href="https://thefinleyfiles.store" target="_blank">Visit The Finley Files →</a>
       </div>
     </div>
@@ -547,18 +539,15 @@
 </footer>
 
 <script>
-  // State
   const answers = { q2: null, q3: null, q4: null };
   let dogName = '';
 
-  // Update dog name placeholders
   function updateDogNameDisplays(name) {
     document.querySelectorAll('.dog-name-display').forEach(el => {
       el.textContent = name || 'your dog';
     });
   }
 
-  // Progress
   function updateProgress(step) {
     const pct = (step / 5) * 100;
     document.getElementById('progress-fill').style.width = pct + '%';
@@ -566,7 +555,6 @@
       step < 6 ? `Step ${step} of 5` : 'Complete';
   }
 
-  // Select option
   function selectOption(el, question, value) {
     document.querySelectorAll(`#q${question.slice(-1)}-options .option`).forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
@@ -574,9 +562,7 @@
     document.getElementById(question + '-error').classList.remove('show');
   }
 
-  // Navigate steps
   function goStep(to) {
-    // Validate current step
     if (to === 2) {
       dogName = document.getElementById('dog-name').value.trim();
       if (!dogName) {
@@ -602,7 +588,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Submit
   function submitResults() {
     const ownerName  = document.getElementById('owner-name').value.trim();
     const ownerEmail = document.getElementById('owner-email').value.trim();
@@ -620,15 +605,12 @@
     }
     if (!valid) return;
 
-    // Move to results step
     goStep(6);
     updateProgress(6);
 
-    // Calculate score
     const total = (answers.q2 || 0) + (answers.q3 || 0) + (answers.q4 || 0);
     showResults(dogName, ownerName, ownerEmail, total);
 
-    // Send email via Formspree (replace FORM_ID with Jim's Formspree endpoint)
     sendToFormspree(dogName, ownerName, ownerEmail, total);
   }
 
@@ -693,11 +675,8 @@
     }, 1800);
   }
 
-  // Formspree email submission
-  // To activate: go to formspree.io, create a free account, create a new form,
-  // and replace xgavebgq below with the ID Formspree gives you (e.g. xpzvwkrb)
   function sendToFormspree(dogName, ownerName, email, score) {
-    const FORM_ID = 'xgavebgq'; // <-- REPLACE THIS
+    const FORM_ID = 'xgavebgq';
 
     if (FORM_ID === 'NEVER_MATCH') {
       console.log('Formspree not yet configured. Email:', email, 'Dog:', dogName, 'Score:', score);

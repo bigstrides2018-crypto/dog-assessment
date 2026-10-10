@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -481,12 +481,12 @@ footer a { color: var(--green-mid); text-decoration: none; }
 <div class="error-msg" id="email-error">Please enter a valid email address.</div>
 </div>
 <p class="privacy">No spam. No selling your info. Just your dog's snapshot and occasional honest content from Jim &amp; Finley.</p>
-<button class="btn" id="submit-btn" onclick="submitResults()">Send Me the Full Snapshot</button>
+<button class="btn" id="submit-btn" onclick="submitResults()">Show Me the Full Snapshot</button>
 </div>
 
 <!-- STEP 7: RESULTS -->
 <div class="step" id="step-7">
-<div id="sending-state" class="sending-msg">Sending your snapshot... one moment.</div>
+<div id="sending-state" class="sending-msg">Unlocking your snapshot... one moment.</div>
 <div id="results-content" style="display:none;">
 <div class="result-header">
 <div class="result-dog-name" id="result-dog-name"></div>
@@ -499,7 +499,7 @@ footer a { color: var(--green-mid); text-decoration: none; }
 </div>
 <div class="result-sections" id="result-sections"></div>
 <div class="result-cta">
-<p>Here's your dog's snapshot above. Want more? Grab Finley's free dog wellness checklist for weekly ideas to help your dog thrive.</p>
+<p>Here's your dog's snapshot above. Want more from Jim &amp; Finley? Come visit The Finley Files.</p>
 <a href="https://thefinleyfiles.store" target="_blank">Visit The Finley Files →</a>
 </div>
 </div>
@@ -597,7 +597,7 @@ function renderPreview() {
   document.getElementById('preview-area-item').className = 'result-item ' + area.cls;
   document.getElementById('preview-cta-text').innerHTML =
     '<strong>Want ' + dogName + '\'s full snapshot + what to watch next?</strong><br>' +
-    'Enter your email and I\'ll send you the complete result so you can keep it and compare changes over time.';
+    'Enter your email to unlock the rest of the result on this screen.';
 }
 
 function submitResults() {
